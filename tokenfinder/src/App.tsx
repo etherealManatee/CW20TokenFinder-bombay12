@@ -15,11 +15,11 @@ const App: Component = () => {
   const [symbol, setSymbol] = createSignal("")
   const [totalSupply, setTotalSupply] = createSignal("")
 
-  
-
+  //when user clicks on the search button after inputting address
   const checkInput = () => {
     const details = document.getElementById("details")
     const error = document.getElementById("error")
+    //check if api has pulled information of a token
     if (data().code) {
       error.style.display = "block"
       details.style.display = "none"
@@ -34,7 +34,7 @@ const App: Component = () => {
     // console.log(typeof totalSupplyWithoutDecimals)
     setTotalSupply(totalSupplyWithoutDecimals.toString())
     
-    console.log(name(), symbol(), totalSupply())
+    // console.log(name(), symbol(), totalSupply())
     
     details.style.display = "block"
     error.style.display = "none"
@@ -44,26 +44,32 @@ const App: Component = () => {
   return (
     <div class={styles.App}>
       <div class="container-md">
-        <h1 class="p-5">CW20 Token Finder - Terra Bombay-12 Testnet</h1>
+        <div class="row">
+          <h1 class="p-5 col align-self-center">CW20 Finder - Terra Testnet</h1>
+        </div>
+        
         <div>
           <input type="text" 
               placeholder='Search Token Address'
-              onInput={(e)=>setAddress(e.target.value)}/>
-          <button class="search_button" onClick={checkInput}>check</button>
+              onInput={(e)=>setAddress(e.target.value)}
+              />
+          <button class="fa-solid fa-magnifying-glass" onClick={checkInput}></button>
+        </div>
+        <div class="row">
+          <div class="card text-dark m-5 col align-self-center" style="display: none;" id="details">
+            <div class="card-body">
+              <p class="card-text">{name() && `Name: ${name()}`}</p>
+              <p class="card-text">{symbol() && `Symbol: ${symbol()}`}</p>
+              <p class="card=text">{totalSupply() ? `Total Supply: ${totalSupply()}` : "Total Supply: N/A"}</p>
+            </div>
+          </div>
+          <div class="card text-dark mt-5 col align-self-center" style="display: none" id="error">
+            <div class="card-body">
+              <p class="card-text">The address you input does not exist. Please check and try again.</p>
+            </div>
+        </div>
         </div>
         
-        <div class="card text-dark" style="display: none" id="details">
-          <div class="card-body">
-            <p class="card-text">{name() && `Name: ${name()}`}</p>
-            <p class="card-text">{symbol() && `Symbol: ${symbol()}`}</p>
-            <p class="card=text">{totalSupply() ? `Total Supply: ${totalSupply()}` : "Total Supply: N/A"}</p>
-          </div>
-        </div>
-        <div class="card text-dark" style="display: none" id="error">
-          <div class="card-body">
-            <p class="card-text">The address you input does not exist. Please check and try again.</p>
-          </div>
-        </div>
       </div>
       
 

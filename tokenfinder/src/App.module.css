@@ -3,6 +3,8 @@
   background-image: linear-gradient(to bottom right, #152640, #A62323);
   color: white;
   height: 100vh;
+  font-family: Hubballi;
+  font-size: large;
 }
 
 .logo {
@@ -41,7 +43,7 @@ input {
 }
 
 button {
-  padding: 10px;
+  padding: 14px;
   color: purple;
   background-color: white;
 }
