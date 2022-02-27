@@ -1,3 +1,28 @@
+## CW20 Token Finder - Terra Testnet (bombay-12)
+
+Develop a frontend website that will allow users to input a contract address and search for a CW20 token's information.
+Information includes name, symbol and total supply.
+
+After forking and git cloning the repository, `cd` into the tokenfinder folder and run `npm i`. Then, `npm run dev` and head to `http://localhost:3000` to access the website.
+Some contracts you can try searching:
+MARS - terra1qs7h830ud0a4hj72yr8f7jmlppyx7z524f7gw6
+LOOP - terra1s8s39cnse493rzkmyr95esa44chc6vgztdm7gh
+NOT (self deployed) - terra15akep48yc6ed7wwwxmwcvgtw3du99typ5656ae
+
+API used - https://bombay-lcd.terra.dev/swagger/#/Query/ContractInfo
+
+## General Approach
+
+1. Plan and design the look using pen and paper and some minor colour testing with Figma
+2. Search for a usable testnet API and test it
+3. Build the base of the website and ensure it works as intended
+4. Work on the looks and feel of the website
+
+## Reflections
+
+Tried out solid-js for the first time, so far seems like a pretty good frontend framework, and would like to experiment with it more.
+
+# Solid-JS 
 ## Usage
 
 Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
