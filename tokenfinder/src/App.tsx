@@ -15,32 +15,58 @@ const App: Component = () => {
   const [symbol, setSymbol] = createSignal("")
   const [totalSupply, setTotalSupply] = createSignal("")
 
+  
+
   const checkInput = () => {
-    console.log(address())
-    
+    const details = document.getElementById("details")
+    const error = document.getElementById("error")
+    if (data().code) {
+      error.style.display = "block"
+      details.style.display = "none"
+      return
+    }
     setName(data().contract_info.init_msg.name)
     setSymbol(data().contract_info.init_msg.symbol)
-    setTotalSupply(data().contract_info.init_msg.mint.cap)
+    let decimals: number = data().contract_info.init_msg.decimals
+    let totalSupplyWithDecimals: number = parseInt(data().contract_info.init_msg.mint.cap)
+    // console.log(decimals, totalSupplyWithDecimals)
+    let totalSupplyWithoutDecimals = (totalSupplyWithDecimals/(Math.pow(10,decimals)))
+    // console.log(typeof totalSupplyWithoutDecimals)
+    setTotalSupply(totalSupplyWithoutDecimals.toString())
     
     console.log(name(), symbol(), totalSupply())
+    
+    details.style.display = "block"
+    error.style.display = "none"
+    
   }
 
   return (
     <div class={styles.App}>
-      <h1>CW20 Token Finder - Terra Bombay-12 Testnet</h1>
+      <div class="container-md">
+        <h1 class="p-5">CW20 Token Finder - Terra Bombay-12 Testnet</h1>
         <div>
           <input type="text" 
               placeholder='Search Token Address'
               onInput={(e)=>setAddress(e.target.value)}/>
-          <button onClick={checkInput}>check</button>
+          <button class="search_button" onClick={checkInput}>check</button>
         </div>
-        <div>
-          <ul>{name() && `Name: ${name()}`}</ul>
-          <ul>{symbol() && `Symbol: ${symbol()}`}</ul>
-          <ul>{totalSupply() ? `Total Supply: ${totalSupply()}` : "Total Supply: N/A"}</ul>
+        
+        <div class="card text-dark" style="display: none" id="details">
+          <div class="card-body">
+            <p class="card-text">{name() && `Name: ${name()}`}</p>
+            <p class="card-text">{symbol() && `Symbol: ${symbol()}`}</p>
+            <p class="card=text">{totalSupply() ? `Total Supply: ${totalSupply()}` : "Total Supply: N/A"}</p>
+          </div>
         </div>
+        <div class="card text-dark" style="display: none" id="error">
+          <div class="card-body">
+            <p class="card-text">The address you input does not exist. Please check and try again.</p>
+          </div>
+        </div>
+      </div>
       
-       <span>{data.loading && "fetching..."}</span>
+
     </div>
   );
 };

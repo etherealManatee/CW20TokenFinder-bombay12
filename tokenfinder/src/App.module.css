@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  background-image: linear-gradient(to bottom right, #152640, #A62323);
+  color: white;
+  height: 100vh;
 }
 
 .logo {
@@ -30,4 +33,15 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+input {
+  padding: 10px;
+  width: 50%;
+}
+
+button {
+  padding: 10px;
+  color: purple;
+  background-color: white;
 }
