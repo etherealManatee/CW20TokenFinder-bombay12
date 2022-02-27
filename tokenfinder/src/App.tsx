@@ -35,7 +35,6 @@ const App: Component = () => {
     setTotalSupply(totalSupplyWithoutDecimals.toString())
     
     // console.log(name(), symbol(), totalSupply())
-    
     details.style.display = "block"
     error.style.display = "none"
     
