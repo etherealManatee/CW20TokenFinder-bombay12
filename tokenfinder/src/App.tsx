@@ -53,7 +53,7 @@ const App: Component = () => {
     //some math for totalSupply
     let decimals: number = data().result.decimals;
     let totalSupplyWithDecimals: number = parseInt(data().result.total_supply);
-    let totalSupplyWithoutDecimals =
+    let totalSupplyWithoutDecimals: number =
       totalSupplyWithDecimals / Math.pow(10, decimals);
 
     setTotalSupply(totalSupplyWithoutDecimals.toString());
