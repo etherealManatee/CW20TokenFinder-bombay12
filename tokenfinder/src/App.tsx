@@ -1,16 +1,21 @@
-import { Component, createResource, createSignal } from "solid-js";
-
-//install prettier, ensure that i end everything with a ;
+import {
+  Component,
+  createResource,
+  createSignal,
+  Match,
+  Switch,
+} from "solid-js";
 
 import styles from "./App.module.css";
 
 const fetchData = async (data: string) => {
   try {
-    const response = await (
+    const response = (
       await fetch(
         `https://bombay-fcd.terra.dev/wasm/contracts/${data}/store?query_msg={%22token_info%22:{}}`
       )
     ).json();
+    return response;
   } catch (err) {
     console.log(err);
   }
@@ -20,39 +25,40 @@ const App: Component = () => {
   const [address, setAddress] = createSignal<string>("");
   const [data] = createResource(address, fetchData);
 
-  //test out Show, if not class list
-  //redeploy a contract that mints the correct amount
-  //on enter for the input
-
   const [name, setName] = createSignal<string>("");
   const [symbol, setSymbol] = createSignal<string>("");
   const [totalSupply, setTotalSupply] = createSignal<string>("");
 
+  const [display, setDisplay] = createSignal<boolean>(false);
+  const [didItFetch, setDidItFetch] = createSignal<boolean>(false);
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      checkInput();
+    }
+  };
+
   //when user clicks on the search button after inputting address
   const checkInput = () => {
-    const details = document.getElementById("details");
-    const error = document.getElementById("error");
+    setDisplay(true);
     //check if api has pulled information of a token
-    if (data().code) {
-      error.style.display = "block";
-      details.style.display = "none";
+    if (!data().result) {
+      setDidItFetch(false);
       return;
     }
-    setName(data().contract_info.init_msg.name);
-    setSymbol(data().contract_info.init_msg.symbol);
-    let decimals: number = data().contract_info.init_msg.decimals;
-    let totalSupplyWithDecimals: number = parseInt(
-      data().contract_info.init_msg.mint.cap
-    );
-    // console.log(decimals, totalSupplyWithDecimals)
+
+    setName(data().result.name);
+    setSymbol(data().result.symbol);
+
+    //some math for totalSupply
+    let decimals: number = data().result.decimals;
+    let totalSupplyWithDecimals: number = parseInt(data().result.total_supply);
     let totalSupplyWithoutDecimals =
       totalSupplyWithDecimals / Math.pow(10, decimals);
-    // console.log(typeof totalSupplyWithoutDecimals)
+
     setTotalSupply(totalSupplyWithoutDecimals.toString());
 
-    // console.log(name(), symbol(), totalSupply())
-    details.style.display = "block";
-    error.style.display = "none";
+    setDidItFetch(true);
   };
 
   return (
@@ -66,7 +72,8 @@ const App: Component = () => {
           <input
             type="text"
             placeholder="Search Token Address"
-            onInput={(e) => setAddress(e.target.value)}
+            onInput={(e) => setAddress(e.currentTarget.value)}
+            onKeyPress={(e) => handleKeyPress(e)}
           />
           <button
             class="fa-solid fa-magnifying-glass"
@@ -74,33 +81,27 @@ const App: Component = () => {
           ></button>
         </div>
         <div class="row">
-          <div
-            class="card text-dark m-5 col align-self-center"
-            style="display: none;"
-            id="details"
-          >
-            <div class="card-body">
-              <p class="card-text">{name() && `Name: ${name()}`}</p>
-              <p class="card-text">{symbol() && `Symbol: ${symbol()}`}</p>
-              <p class="card=text">
-                {totalSupply()
-                  ? `Total Supply: ${totalSupply()}`
-                  : "Total Supply: N/A"}
-              </p>
-            </div>
-          </div>
-          <div
-            class="card text-dark mt-5 col align-self-center"
-            style="display: none"
-            id="error"
-          >
-            <div class="card-body">
-              <p class="card-text">
-                The address you input does not exist. Please check and try
-                again.
-              </p>
-            </div>
-          </div>
+          <Switch fallback={<p>Input address above and hit 'Enter'</p>}>
+            <Match when={display() && didItFetch()}>
+              <div class="card text-dark m-5 col align-self-center">
+                <div class="card-body">
+                  <p class="card-text">{`Name: ${name()}`}</p>
+                  <p class="card-text">{`Symbol: ${symbol()}`}</p>
+                  <p class="card=text">{`Total Supply: ${totalSupply()}`}</p>
+                </div>
+              </div>
+            </Match>
+            <Match when={display() && !didItFetch()}>
+              <div class="card text-dark mt-5 col align-self-center">
+                <div class="card-body">
+                  <p class="card-text">
+                    The address you input does not exist. Please check and try
+                    again.
+                  </p>
+                </div>
+              </div>
+            </Match>
+          </Switch>
         </div>
       </div>
     </div>
