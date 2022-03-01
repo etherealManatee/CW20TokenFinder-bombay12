@@ -4,9 +4,13 @@ Develop a frontend website that will allow users to input a contract address and
 Information includes name, symbol and total supply.
 
 After forking and git cloning the repository, `cd` into the tokenfinder folder and run `npm i`. Then, `npm run dev` and head to `http://localhost:3000` to access the website.
+
 Some contracts you can try searching:
+
 MARS - terra1qs7h830ud0a4hj72yr8f7jmlppyx7z524f7gw6
+
 LOOP - terra1s8s39cnse493rzkmyr95esa44chc6vgztdm7gh
+
 NOT (self deployed) - terra15akep48yc6ed7wwwxmwcvgtw3du99typ5656ae
 
 API used - https://bombay-lcd.terra.dev/swagger/#/Query/ContractInfo
